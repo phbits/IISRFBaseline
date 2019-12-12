@@ -8,29 +8,31 @@ PowerShell module to help establish an IIS Request Filtering baseline. It levera
 
 ## Functions ##
 
-* `Invoke-IISRFBaseline`
-* `Get-IISRFBaselineHelp`
+There are two functions exported by this module: `Invoke-IISRFBaseline` and `Get-IISRFBaselineHelp`
 
-## Output ##
+### `Invoke-IISRFBaseline` ###
 
-#### `Invoke-IISRFBaseline` ####
+Invokes the IIS Request Filtering Baseline module.
 
-Outputs query and results files to the working directory in the following format.
+#### Input ####
 
-* `lp_query_RF-Setting.sql`
-* `lp_results_RF-Setting.csv`
+No inputs other than the provided parameters.
 
-#### `Get-IISRFBaselineHelp` ####
+#### Output ####
 
-Returns documentation pages (`.md`) to the commandline (`cli`) as a `string[]`.
+Outputs Logparser query files (`lp_query_RF-Setting.sql`) and CSV results files (`lp_results_RF-Setting.csv`) to the working directory.
 
-#### No Results File? ####
+### `Get-IISRFBaselineHelp` ###
+
+Returns documentation pages (`.md`) to the commandline (`cli`) as a `string[]`. See ***Documentation*** below for details.
+
+## No Results File? ##
 
 They will only be created if there are results. Result files appear in the working directory with the format `lp_results_RF-Setting.csv`. 
 
 ***Example***: if no requests have been made to the target website using the double escaping technique, there will be ***no results file*** for that setting (`lp_results_allowDoubleEscaping.csv`). The same is true for `allowHighBitCharacters`. If they are not being used, there will be ***no results file*** (`lp_results_allowHighBitCharacters.csv`).
 
-#### Why have CSV results? ####
+## Why have CSV results? ##
 
 Logparser can output graphs though it requires installation of Microsoft Office 2003 Web Components. Instead of making yet another prerequisite, the output is standardized as CSV. The results can then be imported into the anything (e.g. Excel, Cloud Spreadsheets, PowerShell, Python, etc). For settings establishing a limit (e.g. `maxAllowedContentLength`, `maxQueryString`, `maxUrl`), it is most useful to chart the results while others should be reviewed via a spreadsheet to omit invalid requests.
 

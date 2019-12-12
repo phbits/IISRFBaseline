@@ -1,8 +1,10 @@
 # maxAllowedContentLength #
 
-This request limit setting of Request Filtering checks the value of the `Content-Length` request header. If the value in the request header exceeds what is set for `maxAllowedContentLength`, an HTTP `404` is returned and IIS logs an HTTP `404.13`.
+This request limit setting of Request Filtering checks the value of the `Content-Length` request header. If the value in the request header exceeds what is set for `maxAllowedContentLength`, an HTTP `404` (Not found) or `413` (Request entity too large) is returned. To confirm which module is responding to the request use Failed Request Tracing.
 
-Triggering this limit is a hard fail since the client receives an HTTP `404` (Not Found) which isn’t at all indicative of why the request failed. If your website accepts file uploads or form submissions, consider performing client-side input validation to prevent legitimate client requests from triggering this hard fail.
+Triggering this limit is a hard fail since the client receives an HTTP 404 (Not Found) or 413 (Request entity too large). In some cases, the TCP connection is closed by IIS responding with the RST flag set. If your website accepts file uploads or form submissions, consider performing client-side input validation to prevent legitimate client requests from triggering this hard fail.
+
+For more details about file uploads or large requests, see ***File Uploads or Large Requests*** in the FAQ.
 
 STIG recommends a value of `30000000` or less (https://stigviewer.com/stig/iis_8.5_site/2019-01-08/finding/V-76819).
 
