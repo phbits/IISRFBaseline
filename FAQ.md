@@ -161,7 +161,7 @@ Default: 4096 KB (4 MB)
 </system.web>
 ```
 
-Ref: https://docs.microsoft.com/en-us/dotnet/api/system.web.configuration.httpruntimesection
+Reference: https://docs.microsoft.com/en-us/dotnet/api/system.web.configuration.httpruntimesection
 
 ### Website Limits ###
 
@@ -185,5 +185,4 @@ Default: 2 minutes
 </system.applicationHost>
 ```
 
-Ref: https://docs.microsoft.com/en-us/iis/configuration/system.applicationhost/sites/sitedefaults/limits
-Ref: https://stackoverflow.com/questions/55126110/does-iis-request-content-filtering-load-the-full-request-before-filter/59217102#59217102
+Reference: https://docs.microsoft.com/en-us/iis/configuration/system.applicationhost/sites/sitedefaults/limits

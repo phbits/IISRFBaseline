@@ -10,7 +10,7 @@ PowerShell module to help establish an IIS Request Filtering baseline. It levera
 
 There are two functions exported by this module: `Invoke-IISRFBaseline` and `Get-IISRFBaselineHelp`
 
-### `Invoke-IISRFBaseline` ###
+### Invoke-IISRFBaseline ###
 
 Invokes the IIS Request Filtering Baseline module.
 
@@ -20,11 +20,11 @@ No inputs other than the provided parameters.
 
 #### Output ####
 
-Outputs Logparser query files (`lp_query_RF-Setting.sql`) and CSV results files (`lp_results_RF-Setting.csv`) to the working directory.
+Writes Logparser query files (`lp_query_RF-Setting.sql`) and CSV results files (`lp_results_RF-Setting.csv`) to the working directory.
 
-### `Get-IISRFBaselineHelp` ###
+### Get-IISRFBaselineHelp ###
 
-Returns documentation pages (`.md`) to the commandline (`cli`) as a `string[]`. See ***Documentation*** below for details.
+Returns documentation pages (`.md`) to the commandline as a `string[]`. See ***Documentation*** below for details.
 
 ## No Results File? ##
 
