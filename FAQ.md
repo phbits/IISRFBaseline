@@ -14,6 +14,7 @@
 * [Updating web.config](#updating-webconfig)
 * [Microsoft Documentation](#microsoft-documentation)
 * [Manually Launching Logparser Query](#manually-launching-logparser-query)
+* [File Uploads or Large Requests](#file-uploads-or-large-requests)
 
 ## Why use Request Filtering ##
 
@@ -143,3 +144,45 @@ When manually running Logparser queries consider excluding the `-stats:OFF` and 
 ```
 Example: LogParser.exe -i:IISW3C -o:CSV file:D:\WorkingFolder\lp_query_RF-Setting.sql
 ```
+
+## File Uploads or Large Requests ##
+
+When accepting file uploads or large requests, the following settings may need to be adjusted. While they’re not part of the Request Filtering module, they are closely related to `maxAllowedContentLength`.
+
+### httpRuntime ###
+
+Configures the ASP.NET HTTP runtime and thus only applicable to application pools running .NET. While many settings are similar to Request Filtering, these thresholds are checked much later in the IIS request pipeline. The setting `MaxRequestLength` is an `Int32` specified in `KB`. Note the difference of this setting being in `KB` while most other settings are specified in bytes.
+
+Default: 4096 KB (4 MB)
+
+```xml
+<system.web>
+	<httpRuntime maxRequestLength="4096" />
+</system.web>
+```
+
+Reference: https://docs.microsoft.com/en-us/dotnet/api/system.web.configuration.httpruntimesection
+
+### Website Limits ###
+
+The defaults are quite generous though the setting of concern is `connectionTimeout`. This is because `http.sys` will continue to accept the HTTP request payload (e.g. an uploaded file), that may even exceed size limits, until this timeout expires. Consider lowering to something more inline with the target demographic. This setting will not impact active connections as described in the following example. 
+
+***Example:*** When a file (or large HTTP payload) exceeds the allowable size, IIS will respond with the appropriate HTTP status code (`404` or `413`) and set the `FIN` flag on the TCP connection. The `FIN` flag is what starts this timer. This is important because `http.sys` will continue to allow the upload until this timer expires. If the upload "completes", the client will see the HTTP response code (`404` or `413`). If the upload exceeds the timeout, IIS responds to the TCP connection using the `RST` flag which closes the TCP connection. The client will then see a broken connection error page.
+
+This (mis)configuration could lead to a denial of service scenario where a large request payload is allowed for the duration of this timeout. The reason active connections are not impacted by this setting is because the timer is only triggered when one of the TCP endpoints attempts to close a connection.
+
+See this [Stackoverflow post](https://stackoverflow.com/questions/55126110/does-iis-request-content-filtering-load-the-full-request-before-filter/59217102#59217102) for more.
+
+Default: 2 minutes
+
+```xml
+<system.applicationHost>
+   <sites>
+      <siteDefaults>
+         <limits connectionTimeout="00:02:00" />
+      </siteDefaults>
+   </sites>
+</system.applicationHost>
+```
+
+Reference: https://docs.microsoft.com/en-us/iis/configuration/system.applicationhost/sites/sitedefaults/limits
